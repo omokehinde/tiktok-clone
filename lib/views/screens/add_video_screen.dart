@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:tiktok_clone/constants.dart';
+import 'package:tiktok_clone/views/screens/confirm_screen.dart';
 
 class AddVideoScreen extends StatelessWidget {
   const AddVideoScreen({super.key});
@@ -8,17 +11,21 @@ class AddVideoScreen extends StatelessWidget {
   pickVideo(ImageSource src, BuildContext context) async {
     final video = await ImagePicker().pickVideo(source: src);
     if (video != null) {
-      
+      Navigator.of(context)
+          .push(MaterialPageRoute(builder: (context) => ConfirmScreen(
+            videoFile: File(video.path),
+            videoPath: video.path,
+          )));
     }
   }
 
-  showOptionDialohue(BuildContext context) {
+  showOptionDialogue(BuildContext context) {
     return showDialog(
         context: context,
         builder: (context) => SimpleDialog(
               children: [
                 SimpleDialogOption(
-                  onPressed: () {},
+                  onPressed: () => pickVideo(ImageSource.gallery, context),
                   child: Row(
                     children: const [
                       Icon(Icons.image),
@@ -33,7 +40,7 @@ class AddVideoScreen extends StatelessWidget {
                   ),
                 ),
                 SimpleDialogOption(
-                  onPressed: () {},
+                  onPressed: () => pickVideo(ImageSource.camera, context),
                   child: Row(
                     children: const [
                       Icon(Icons.camera_alt),
@@ -48,7 +55,7 @@ class AddVideoScreen extends StatelessWidget {
                   ),
                 ),
                 SimpleDialogOption(
-                  onPressed: () {},
+                  onPressed: () => Navigator.of(context).pop(),
                   child: Row(
                     children: const [
                       Icon(Icons.cancel),
@@ -71,7 +78,7 @@ class AddVideoScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: InkWell(
-          onTap: () => showOptionDialohue(context),
+          onTap: () => showOptionDialogue(context),
           child: Container(
             width: 190,
             height: 50,
